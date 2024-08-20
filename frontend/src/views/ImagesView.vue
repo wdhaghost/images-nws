@@ -82,7 +82,7 @@ fetchImages();
     <!-- Affichage de la liste des images -->
     <div v-if="images.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <div v-for="image in images" :key="image.id" class="image-item bg-white shadow-md rounded-lg overflow-hidden">
-        <img :src="getImageUrl(image.url)" :alt="`Image ${image.id}`" class="w-full h-48 object-cover" />
+        <img :src="getImageUrl(image.path)" :alt="`Image ${image.id}`" class="w-full h-48 object-cover" />
         <div class="p-4 flex justify-between items-center">
           <span class="text-sm font-bold text-gray-700">{{ image.name }}</span>
           <div>
