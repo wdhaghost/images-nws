@@ -11,6 +11,10 @@ if (localStorage.getItem('token')) {
   userStore.login(JSON.parse(localStorage.getItem('user')), localStorage.getItem('token'));
 }
 
+const logout = () => {
+  userStore.logout(); // Appeler la fonction logout du store
+  router.push('/'); // Rediriger vers la page d'accueil après déconnexion
+};
 // Fonction pour basculer le menu sur mobile
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -42,7 +46,7 @@ const toggleMenu = () => {
       <!-- Informations utilisateur et déconnexion -->
       <div v-if="userStore.isLoggedIn" class="hidden lg:flex items-center space-x-4">
         <RouterLink to="/user">{{ userStore.user.name }}</RouterLink>
-        <button @click="userStore.logout" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg">
+        <button @click="logout" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg">
           Logout
         </button>
       </div>
@@ -61,7 +65,7 @@ const toggleMenu = () => {
           <RouterLink to="/user" @click="isMenuOpen = false">{{ userStore.user.name }}</RouterLink>
           {{ userStore.user.name }}
         </div>
-        <button v-if="userStore.isLoggedIn" @click="userStore.logout" class="block bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg mx-4">
+        <button v-if="userStore.isLoggedIn" @click="logout" class="block bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg mx-4">
           Logout
         </button>
       </nav>
