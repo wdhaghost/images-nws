@@ -68,7 +68,7 @@ const togglePrivacy = async (id, currentPrivacy) => {
 
 // Générer l'URL de l'image à partir de son chemin stocké
 const getImageUrl = (path) => {
-  return import.meta.env.VITE_API_URL + `/storage/${path}`; // Assurez-vous que votre API retourne les bons chemins
+  return import.meta.env.VITE_API_URL + `/storage/images/${path}`; // Assurez-vous que votre API retourne les bons chemins
 };
 
 // Appeler la fonction `fetchImages` au montage du composant pour récupérer les images
