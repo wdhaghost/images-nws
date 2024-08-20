@@ -41,7 +41,7 @@ const toggleMenu = () => {
 
       <!-- Informations utilisateur et déconnexion -->
       <div v-if="userStore.isLoggedIn" class="hidden lg:flex items-center space-x-4">
-        <span class="font-medium">{{ userStore.user.name }}</span>
+        <RouterLink to="/user">{{ userStore.user.name }}</RouterLink>
         <button @click="userStore.logout" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg">
           Logout
         </button>
@@ -51,13 +51,14 @@ const toggleMenu = () => {
     <div v-if="isMenuOpen" class="lg:hidden bg-gray-700">
       <nav class="space-y-2 py-4">
         <RouterLink to="/" @click="isMenuOpen = false" class="block text-white hover:text-gray-300 font-semibold px-4">Accueil</RouterLink>
-        <RouterLink to="/images" @click="isMenuOpen = false" class="block text-white hover:text-gray-300 font-semibold px-4">Images</RouterLink>
-        <RouterLink to="/upload" @click="isMenuOpen = false" class="block text-white hover:text-gray-300 font-semibold px-4">Upload</RouterLink>
+        <RouterLink to="/images" @click="isMenuOpen = false" class="block text-white hover:text-gray-300 font-semibold px-4" v-if="userStore.isLoggedIn">Images</RouterLink>
+        <RouterLink to="/upload" @click="isMenuOpen = false" class="block text-white hover:text-gray-300 font-semibold px-4" v-if="userStore.isLoggedIn">Upload</RouterLink>
         <RouterLink to="/login" @click="isMenuOpen = false" class="block text-white hover:text-gray-300 font-semibold px-4" v-if="!userStore.isLoggedIn">Connexion</RouterLink>
         <RouterLink to="/register" @click="isMenuOpen = false" class="block text-white hover:text-gray-300 font-semibold px-4" v-if="!userStore.isLoggedIn">Inscription</RouterLink>
         
         <!-- Informations utilisateur et déconnexion sur mobile -->
         <div v-if="userStore.isLoggedIn" class="block text-white font-medium px-4">
+          <RouterLink to="/user" @click="isMenuOpen = false">{{ userStore.user.name }}</RouterLink>
           {{ userStore.user.name }}
         </div>
         <button v-if="userStore.isLoggedIn" @click="userStore.logout" class="block bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg mx-4">
