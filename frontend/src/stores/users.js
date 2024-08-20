@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useRouter } from "vue-router";
+
 export const useUserStore = defineStore('user',{
     state(){
         return{
@@ -9,6 +11,7 @@ export const useUserStore = defineStore('user',{
     
 },actions:{
     async logout() {
+      const router = useRouter()
         try {
           // Envoyer la requête de déconnexion avec les en-têtes appropriés
           await axios.post(import.meta.env.VITE_API_URL + '/api/logout', {}, {
@@ -24,7 +27,7 @@ export const useUserStore = defineStore('user',{
           // Supprimer les informations de l'utilisateur et le token du localStorage
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          
+          router.push('/');
           // Vous pouvez rediriger l'utilisateur ou afficher un message de succès
         } catch (error) {
           console.error('Error during logout:', error.response ? error.response.data : error.message);
