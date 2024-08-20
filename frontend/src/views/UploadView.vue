@@ -100,8 +100,8 @@ const uploadImage = async () => {
 
     <!-- Zone de Drag & Drop -->
     <!-- Bouton d'upload -->
-     <div class="w-50 mx-auto">
-      <input type="text" v-model="name" placeholder="Nom de l'image" class="mt-1 block w-50 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+     <div class="w-full mx-auto">
+      <input type="text" v-model="name" placeholder="Nom de l'image" class="mt-1 block mx-auto w-50 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
      </div>
     <div class="drop-area bg-white border-2 border-dashed border-gray-300 p-6 rounded-lg mb-6 mx-auto max-w-lg text-center cursor-pointer"
          @drop="handleDrop"
