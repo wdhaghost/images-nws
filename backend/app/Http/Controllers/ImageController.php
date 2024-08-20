@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 
 class ImageController extends Controller
 {
@@ -17,6 +18,10 @@ class ImageController extends Controller
 
         return response()->json($images);
 
+    }
+    public function AllImages(){
+        $images= Image::where('is_public',true) ->with('user')->get();
+        return response()->json($images,200);
     }
 
     /**
@@ -32,11 +37,15 @@ class ImageController extends Controller
         $path = $request->file('image')->store('images', 'public');
 
         // Créer l'entrée dans la base de données
-        $image = Image::create([
-            'user_id' => $request->user()->id,
-            'url' => $path,
-            'is_public' => true, // Par défaut l'image est publique
-        ]);
+        $image = new Image();
+        if($request->name){
+            $image->name = $request->name;
+        }
+
+        $image->user_id = $request->user()->id;
+        $image->path = $path;
+        $image->is_public = true; 
+        $image->save();
 
         return response()->json($image, 201);
     }
@@ -44,9 +53,30 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($url)
     {
-        
+        // Rechercher l'image dans la base de données via son URL unique
+        $image = Image::where('url', $url)->with('user')->first();
+
+        // Si l'image n'existe pas, renvoyer une erreur 404
+        if (!$image) {
+            return response()->json(['error' => 'Image inexistante.'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (!$image->is_public) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Récupérer le chemin réel de l'image
+        $path = $image->path;
+
+        // Vérifier si le fichier existe sur le système de fichiers
+        if (!Storage::disk('public')->exists($path)) {
+            return response()->json(['error' => 'Image non trouvé.'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Retourner l'image en tant que fichier
+        return response()->json($image, 200);
     }
 
     /**
@@ -56,8 +86,9 @@ class ImageController extends Controller
     {
         $image = Image::where('id',$request->id)->first();
         if ($image){
-            $image->is_public= $request->status;
-            return response()->json();
+            $image->is_public= $request->is_public;
+            $image->save();
+            return response()->json($image, 200);
         }
         
     }
@@ -65,9 +96,11 @@ class ImageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Image $image)
+    public function destroy(Request $request)
     {
         // Vérifier que l'utilisateur est propriétaire de l'image
+        $image = Image::findOrFail($request->id);
+
         if ($request->user()->id !== $image->user_id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }

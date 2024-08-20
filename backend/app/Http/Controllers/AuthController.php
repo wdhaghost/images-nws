@@ -38,8 +38,13 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user->tokens()->delete();
-        return response()->json(['message','Déconnexion']);
+        if ($request->user()) {
+            // Révoquez uniquement le token actuel
+            $request->user()->currentAccessToken()->delete();
+    
+            return response()->json(['message' => 'Logged out successfully'], 200);
+        }
+        return response()->json(['message'=>'erreur'],401);
     }
 
     public function login(Request $request)
@@ -63,5 +68,15 @@ class AuthController extends Controller
         return response()->json(['user'=>$user,'token'=>$token],200);
 
 
+    }
+
+    public function delete(Request $request)
+    {
+        $user = $request->user();
+        if ($user){
+            $user->delete();
+            return response()->json(['message'=>'user deleted'],200);
+        }
+        return response()->json(['message'=>'user not found'],404);
     }
 }
