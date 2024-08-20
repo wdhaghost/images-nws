@@ -101,12 +101,13 @@ class ImageController extends Controller
         // Vérifier que l'utilisateur est propriétaire de l'image
         $image = Image::findOrFail($request->id);
 
+        
         if ($request->user()->id !== $image->user_id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     
         // Supprimer l'image du stockage
-        Storage::disk('public')->delete($image->url);
+        Storage::disk('public')->delete($image->path);
     
         // Supprimer l'entrée de la base de données
         $image->delete();
