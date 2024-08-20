@@ -124,7 +124,7 @@ const uploadImage = async () => {
     <!-- Affichage du lien vers l'image après upload -->
     <div v-if="uploadedImageUrl" class="mt-6 text-center">
       <RouterLink :to="`/image/${uploadedImageUrl}`" class="text-blue-500 underline">
-        View Uploaded Image
+        Voir l'image téléchargée
       </RouterLink>
     </div>
   </div>
