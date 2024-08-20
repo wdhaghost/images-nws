@@ -1,11 +1,11 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView,useRouter } from 'vue-router';
 import { useUserStore } from "./stores/users";
 import { ref } from 'vue';
 
 // Gérer l'état du menu pour les petits écrans
 const isMenuOpen = ref(false);
-
+const router = useRouter();
 const userStore = useUserStore();
 if (localStorage.getItem('token')) {
   userStore.login(JSON.parse(localStorage.getItem('user')), localStorage.getItem('token'));
